@@ -16,7 +16,7 @@ export const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     if (authUser) {
       const socket = io(
-        import.meta.env.NODE.ENV === "development"
+        import.meta.env.MODE === "development"
           ? "http://localhost:5001"
           : "/",
         {
