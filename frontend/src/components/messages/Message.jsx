@@ -20,6 +20,8 @@ const Message = ({ message }) => {
     ? "bg-primary text-primary-content"
     : "bg-base-200 text-base-content";
 
+  const shakeClass = message.shouldShake ? "shake" : "";
+
   return (
     <div className={`chat ${chatClassName} mb-2`}>
       {/* Avatar */}
@@ -31,7 +33,7 @@ const Message = ({ message }) => {
 
       {/* Bubble */}
       <div
-        className={`chat-bubble ${bubbleStyles} shadow-md max-w-xs md:max-w-md break-words`}
+        className={`chat-bubble ${bubbleStyles} shadow-md max-w-xs md:max-w-md break-words ${shakeClass}`}
       >
         {message.message}
       </div>
