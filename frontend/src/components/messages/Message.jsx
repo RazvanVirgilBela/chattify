@@ -1,21 +1,45 @@
 import React from "react";
+import { useAuthContext } from "../../context/AuthContext";
+import useConversation from "../../zustand/useConversation";
+import { extractTime } from "../../utils/extractTime";
 
-const Message = () => {
+const Message = ({ message }) => {
+  const { authUser } = useAuthContext();
+  const { selectedConversation } = useConversation();
+
+  const fromMe = message.senderId === authUser._id;
+
+  const formatedTime = extractTime(message.createdAt);
+
+  const chatClassName = fromMe ? "chat-end" : "chat-start";
+  const profilePic = fromMe
+    ? authUser.profilePic
+    : selectedConversation?.profilePic;
+
+  const bubbleStyles = fromMe
+    ? "bg-primary text-primary-content"
+    : "bg-base-200 text-base-content";
+
   return (
-    <div className="chat chat-end">
+    <div className={`chat ${chatClassName} mb-2`}>
+      {/* Avatar */}
       <div className="chat-image avatar">
-        <div className="w-10 rounded-full">
-          <img
-            alt="Tailwind CSS chat bubble component"
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-          />
+        <div className="w-10 rounded-full ring ring-base-300 ring-offset-base-100 ring-offset-2">
+          <img src={profilePic} alt="profile" />
         </div>
       </div>
-      <div className="chat-bubble">
-        It was said that you would, destroy the Sith, not join them.
+
+      {/* Bubble */}
+      <div
+        className={`chat-bubble ${bubbleStyles} shadow-md max-w-xs md:max-w-md break-words`}
+      >
+        {message.message}
       </div>
-      <div className="chat-footer opacity-50 flex gap-1 items-center">
-        12:46
+
+      {/* Footer */}
+      <div className="chat-footer opacity-50 text-xs mt-1 flex items-center gap-1">
+        <span>{formatedTime}</span>
+        {fromMe && <span>✓✓</span>}
       </div>
     </div>
   );

@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
 import { TiMessages } from "react-icons/ti";
+import useConversation from "../../zustand/useConversation";
 
 const MessageContainer = () => {
-  const noChatSelected = false;
+  const { selectedConversation, setSelectedConversation } = useConversation();
+
+  useEffect(() => {
+    return () => setSelectedConversation(null);
+  }, [setSelectedConversation]);
+
   return (
     <div className="flex flex-col flex-1">
-      {noChatSelected ? (
+      {!selectedConversation ? (
         <NoChatSelected />
       ) : (
         <>
@@ -17,17 +23,16 @@ const MessageContainer = () => {
               {/* Avatar */}
               <div className="avatar">
                 <div className="w-10 rounded-full">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                    alt="user"
-                  />
+                  <img src={selectedConversation.profilePic} alt="user" />
                 </div>
               </div>
 
               {/* Name */}
               <div>
                 <p className="text-sm text-base-content/60">To:</p>
-                <p className="font-semibold text-base-content">John Doe</p>
+                <p className="font-semibold text-base-content">
+                  {selectedConversation.fullName}
+                </p>
               </div>
             </div>
           </div>
